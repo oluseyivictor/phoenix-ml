@@ -1,0 +1,2 @@
+/usr/bin/ar qc libGherkin.a  CMakeFiles/Gherkin.dir/Matrix.cpp.o CMakeFiles/Gherkin.dir/Vector.cpp.o
+/usr/bin/ranlib libGherkin.a
