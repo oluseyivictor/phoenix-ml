@@ -56,4 +56,6 @@ Matrix::Matrix(int r, int c) : rows(r), cols(c) {
    int Matrix::size() const{
         return (rows*cols);
    }
+
+
 }

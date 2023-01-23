@@ -14,7 +14,7 @@ namespace gherkin{
  * @brief The Matrix class represents a matrix of double values.
  */
 class Matrix {
-private:
+public:
     /**
      * @brief The number of rows in the matrix.
      */
@@ -24,7 +24,7 @@ private:
      */
     int cols;
 
-protected:
+public:
     /**
      * @brief A 2D array of double values representing the matrix.
      */
@@ -92,6 +92,8 @@ public:
      *
      */
     void print() const;
+
+
 
 
     

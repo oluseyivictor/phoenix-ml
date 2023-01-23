@@ -8,6 +8,8 @@
 
 #include "Matrix.h"
 
+
+
 namespace gherkin{
 
 
@@ -42,7 +44,7 @@ class Vector : public Matrix {
     *
     * @return A new Vector object representing the result of the multiplication.
     */
-    Vector operator*(const Matrix& m);
+    //Vector operator*(const Matrix& m);
 
 
     /**
@@ -64,8 +66,14 @@ class Vector : public Matrix {
      */
     const double& operator[](int i) const;
 
+
+    //vector multiply
+    void multiply(double scalar, Vector &t ); 
+
 };
 
 }
+
+
 
 #endif

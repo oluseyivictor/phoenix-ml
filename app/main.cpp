@@ -1,22 +1,30 @@
 #include <iostream>
-#include "Matrix.h"
-#include "Vector.h"
 #include "config.hpp"
+#include "nn.h"
+#include "Vector.h"
+#include <nlohmann/json.hpp>
+
+
 
 using namespace gherkin;
 
 int main(){
 
-    std::cout<< project_name <<std::endl;
-    std::cout<< project_version <<std::endl;
+Model pred;
+Vector newVector = 5;
+Vector oldVector(5);
 
-double ment2[3] = {0.2,0.4,0.6};
+double newData[5] = {1,2,3,4,5};
+double nData[5] = {1,2,3,4};
 
-     Vector myvalue(3);
-     myvalue<<ment2;
-     Vector Newv(3);
-     myvalue *= 2;
-    myvalue.print();
+oldVector<<newData;
+newVector.multiply(5, oldVector);
+
+newVector.print();
+
+std::cout<< weighted_sum(newVector, oldVector)<<std::endl;
+
+
 
 
     return 1;
