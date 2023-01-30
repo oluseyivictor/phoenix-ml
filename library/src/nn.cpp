@@ -1,6 +1,6 @@
  /*
  * @file nn.cpp
- * @brief this file contains implementaion of gherkins neural network library .
+ * @brief this file contains implementaion of phoenixs neural network library .
  */
 #include "nn.h"
 

@@ -3,7 +3,7 @@
 #include "nn.h"
 
 
-using namespace gherkin;
+using namespace phoenix;
 
 TEST(TestSuiteSample, TestSample){
     double a[2] = {1,2};

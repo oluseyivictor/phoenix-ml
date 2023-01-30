@@ -9,7 +9,7 @@
 #include <iostream>
 
 
-namespace gherkin{
+namespace phoenix{
 /**
  * @brief The Matrix class represents a matrix of double values.
  */

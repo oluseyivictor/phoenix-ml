@@ -1,6 +1,6 @@
 /**
  * @file nn.h
- * @brief lightweight neural network engine of gherkins library .
+ * @brief lightweight neural network engine of phoenixs library .
  */
 
 #ifndef NN_H
@@ -8,7 +8,7 @@
 
 #include "Vector.h"
 
-using namespace gherkin;
+using namespace phoenix;
 
 double weighted_sum(const Vector & input, const Vector & weight);
 

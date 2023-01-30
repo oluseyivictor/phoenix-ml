@@ -5,7 +5,7 @@
 
 #include "Matrix.h"
 
-namespace gherkin{
+namespace phoenix{
 
 
 Matrix::Matrix(int r, int c) : rows(r), cols(c) {

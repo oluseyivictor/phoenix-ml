@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.11.0)
 
 project(
-    Gherkins-ML
+    phoenixs-ML
     VERSION 1.0.0
     LANGUAGES C CXX)
 
@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD           17)
 set(CMAKE_CXX_STANDARD_REQUIRED  ON)
 set(CMAKE_CXX_EXTENSIONS         OFF)
 
-set(LIBRARY_NAME Gherkin)
+set(LIBRARY_NAME phoenix)
 set(EXECUTABLE_NAME Executable)
 
 
