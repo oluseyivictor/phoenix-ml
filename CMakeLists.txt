@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.11.0)
 
 project(
-    phoenixs-ML
+    phoenix-ML
     VERSION 1.0.0
     LANGUAGES C CXX)
 
@@ -31,7 +31,8 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest nlohmann_json)
 
-option(COMPLE_EXECUTABLE "whether to compile the executable" OFF)
+option(COMPLE_EXECUTABLE "option to compile the executable" OFF)
+option(ENABLE_TESTING "option to enable a unit testing build" OFF)
 
 add_subdirectory(library)
 add_subdirectory(app)

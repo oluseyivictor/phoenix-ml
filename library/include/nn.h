@@ -10,7 +10,6 @@
 
 using namespace phoenix;
 
-double weighted_sum(const Vector & input, const Vector & weight);
 
 class Model {
 
@@ -37,6 +36,19 @@ public:
      * @return A predicted value which is input multiplied by weight.
      */
     double single_nn(double input, double weight) { return(input*weight); }
+
+    template<typename T, int size>
+    T weighted_sum(const Vector<T, size>& input, const Vector<T, size>& weight){
+
+       T output = 0;
+
+      for(int i=0; i<input.size(); i++){
+
+         output += input[i]*weight[i];
+
+        }
+        return output;
+    }
 
 
     

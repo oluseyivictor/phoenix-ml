@@ -48,49 +48,46 @@ class Vector : public Matrix<T, size, 1> {
      */
     const T& operator[] (int i) const {return Matrix<T, size, 1>::operator()(i, 0); }
 
-    // /**
-    //  * @brief Multiplies the vector by a scalar value.
-    //  *
-    //  * @param scalar The scalar value to multiply the vector by.
-    //  *
-    //  * @return A reference to the current Vector object.
-    //  */
-    // Vector& operator*= (double scalar);
+    /**
+     * @brief Multiplies the vector by a scalar value.
+     *
+     * @param scalar The scalar value to multiply the vector by.
+     *
+     * @return A reference to the current Vector object.
+     */
+    Vector<T, size> operator*(double scaler){
+        Vector<T, size> result;
+        for (int i = 0; i < size; i++){
+            result[i] = (*this)[i]*scaler;
+        }
+        return result;
+    }
 
+    /**
+     * @brief Multiplies the vector by a scalar value.
+     *
+     * @param scalar The scalar value to multiply the vector by.
+     *
+     * @return A reference to the current Vector object.
+     */
+    friend Vector<T, size> operator*(double scaler, const Vector<T, size>& other ){
+        Vector<T, size> result;
+        for (int i = 0; i < size; i++){
+            result[i] = other[i]*scaler;
+        }
+        return result;
+    }
 
-    // /**
-    // * @brief Performs vector-matrix multiplication and returns the result as a new vector.
-    // *
-    // * @param v The vector to multiply.
-    // * @param m The matrix to multiply.
-    // *
-    // * @return A new Vector object representing the result of the multiplication.
-    // */
-    // //Vector operator*(const Matrix& m);
-
-
-    // /**
-    //  * @brief Accesses an element of the vector at a given row.
-    //  *
-    //  * @param i The row of the element.
-    //  *
-    //  * @return A reference to the element at the specified row.
-    //  */
-    // double& operator[](int i);
-
-
-    // /**
-    //  * @brief Accesses an element of the vector at a given row.
-    //  *
-    //  * @param i The row of the element.
-    //  *
-    //  * @return A reference to the element at the specified row.
-    //  */
-    // const double& operator[](int i) const;
-
-
-    // //vector multiply
-    // void multiply(double scalar, Vector &t ); 
+    
+    /**
+    * @brief Performs vector-matrix multiplication and returns the result as a new vector.
+    *
+    * @param v The vector to multiply.
+    * @param m The matrix to multiply.
+    *
+    * @return A new Vector object representing the result of the multiplication.
+    */
+   // Vector operator*(const Matrix& m);
 
 };
 

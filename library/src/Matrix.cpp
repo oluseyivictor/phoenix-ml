@@ -5,8 +5,3 @@
 
 #include "Matrix.h"
 
-namespace phoenix{
-
-
-
-}
