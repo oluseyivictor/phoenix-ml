@@ -7,94 +7,98 @@
 #define MATRIX_H
 
 #include <iostream>
+#include <memory>
+#include <initializer_list>
 
 
 namespace phoenix{
-/**
- * @brief The Matrix class represents a matrix of double values.
- */
-class Matrix {
-public:
-    /**
-     * @brief The number of rows in the matrix.
-     */
-    int rows;
-    /**
-     * @brief The number of columns in the matrix.
-     */
-    int cols;
 
-public:
+
+/**
+ *  @brief The Matrix class represents a matrix of values with generic programming.
+ * 
+ *  @tparam T Type of elements stored in the matrix
+ *  @tparam rows Number of rows in the matrix
+ *  @tparam cols Number of cols in the matrix
+ */
+
+template<typename T, int rows, int cols>
+class Matrix {
+
+private:
     /**
-     * @brief A 2D array of double values representing the matrix.
+     * @brief Unique pointer to the data stored in the matrix
      */
-    double** data;
+    std::unique_ptr<T[]> data;
 
 public:
     /**
      * @brief Constructs a Matrix object with the specified number of rows and columns.
      *
-     * @param rows The number of rows in the matrix.
-     * @param cols The number of columns in the matrix.
+     * @param list Initializer list for matrix elements
      */
-    Matrix(int rows, int cols);
+    Matrix(std::initializer_list<T> list = {})
+        : data(std::make_unique<T[]>(rows*cols))
+    {
+        int i = 0;
+        for(const auto& value : list)
+        {
+            data[i++] = value;
+            if (i== rows * cols) break;
+        }
+    }
 
     /**
-     * @brief Destructs a Matrix object and frees up memory.
-     */
-    ~Matrix();
-
-
-    /**
-     * @brief Accesses an element of the matrix at a given row.
+     * @brief Get the number of rows in the matrix
      *
-     * @return A reference to the element at the specified row.
+     * @return int Number of rows
      */
-    int row() const {return rows;}
+    int getRows() const {return rows;}
 
 
     /**
-     * @brief Accesses an element of the matrix at a given column.
+     * @brief Get the number of cols in the matrix
      *
-     * @return A reference to the element at the specified column.
+     * @return int Number of cols
      */
-    int col() const {return cols;}
+    int getCols() const {return cols;}
 
 
     /**
-     * @brief Accesses an element of the matrix at a given row and column.
+     * @brief Overloaded parenthesis operator to accesses matrix element at a given row and column.
      *
-     * @param irow The row of the element.
-     * @param jcol The column of the element.
+     * @param i row Row index of the element.
+     * @param j col Column index of the element.
      *
-     * @return A reference to the element at the specified row and column.
+     * @return T& Reference to the element at the specified row and column.
      */
-    double& operator() (int irow, int jcol) const;
-
-    /**
-     * @brief maps an array into element of the matrix at a given row and column.
-     *
-     * @param arr an array element of size n.
-     */
-    void operator<<(double *arr);
+    T& operator() (int i, int j) const {return data[i * cols + j]; };
 
 
     /**
-     * @brief the content of matrix are printed on screen
+     * @brief Get the total number of element in a matrix
      *
      * @return the total size of the matric given by row multiply by col
      */
-    int size() const;
+    int size() const {return rows*cols;}
 
-
-    /**
-     * @brief the content of matrix are printed on screen
+     /**
+     * @brief Overloaded stream operator to print the matrix
      *
+     * @param os Output stream
+     * @param mat Matrix to print
+     * @return std::ostream& Output stream.
      */
-    void print() const;
 
-
-
+    friend std::ostream& operator<<(std::ostream& os, const Matrix<T, rows, cols>& mat){
+    for (int i = 0; i<mat.getRows(); i++){
+    for (int j = 0; j < mat.getCols(); j++){
+        os<<mat.data[i * mat.getCols() + j]<<" ";
+    }
+    os<<std::endl;
+}
+return os;
+}
 
     
 };
