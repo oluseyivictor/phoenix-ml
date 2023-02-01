@@ -6,62 +6,58 @@
 
 
 
+ template<typename T, int rows, int cols>
+Vector<T, cols> convert(Matrix<T, rows, cols>& other, int i);
+
 using namespace phoenix;
+
+
 
 int main(){
 
 Model pred;
 
-Matrix<int,2,3> poo;
+Matrix<double, 3, 3> weights1({-2.0, 9.5, 2.01,
+                               -0.8, 7.2, 6.3,
+                               -0.5, 0.45, 0.9});
 
-Vector<double, 5> newData({9,2,3,8,5});
-Vector<double, 5>  nData({1,2.3,3.6,4.6,9.5});
+Matrix<double, 3, 3> weights2({ -1.0,   1.15,  0.11,
+                                -0.18,  0.15, -0.01,
+                                 0.25, -0.25, -0.1});
 
-Matrix<float, 3, 3> mat({1,3,5,
-                         4,5,6,
-                         7,8,9});
+Matrix<double, 3, 3> weights3;
 
-Matrix<int, 2, 3> m1;
-Matrix<int, 3, 2> m2;
+weights3.randfill();
+
+Tensor<double, 3, 3> debate;
+debate.addMatrix(weights1);
+debate.addMatrix(weights2);
+
+double expected_val[3] = {600, 10, -90};
+
+// debate.push_back(weights);
+
+Vector<double, 3> inputs({30, 87, 110});
+
+Vector<double, 3> newData({12, 60, 60});
+Vector<double, 3>  nData({-2, 2, 1});
+
+Vector<double, 3> out;
+
+ //out = vecTomat_multiply(inputs, weights3);
+//out = mlayer_multiply(inputs, debate);
+out.randfill();
+
+ //double base = weighted_sum(newData, nData);    //156
+
+auto rand = inputs.scale() ;
 
 
-        m1(0, 0) = 1;
-        m1(0, 1) = 2;
-        m1(0, 2) = 3;
-        m1(1, 0) = 4;
-        m1(1, 1) = 5;
-        m1(1, 2) = 6;
-
-        m2(0, 0) = 7;
-        m2(0, 1) = 8;
-        m2(1, 0) = 9;
-        m2(1, 1) = 10;
-        m2(2, 0) = 11;
-        m2(2, 1) = 12;
-
-Matrix<int, 2, 2> m3 = m1 * m2;
-
- std::cout<< m3<<std::endl;
- //mat2 = mat.transpose();
-
-
-// std::cout<< mat2<<std::endl;
-
-  std::cout<< newData[2]<<std::endl;
-
-Vector<double, 5>  lData;
-
-lData = nData * 2.8;
-
- std::cout<< lData<<std::endl;
-
- lData = 2.8 * nData;
-
-// int base = pred.weighted_sum(lData, nData);
-//   std::cout<< base<<std::endl;
-
-double base = pred.single_nn(nData[2], mat[1][2]);
-  std::cout<< base<<std::endl;
+std::cout<< rand <<std::endl;
+    
+   std::cout<< weights3<<std::endl;
+     std::cout<< out<<std::endl;
+// std::cout<< square_error(expected_val[2], out[2])<<std::endl;
 
     return 1;
 }

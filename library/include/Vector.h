@@ -78,7 +78,20 @@ class Vector : public Matrix<T, size, 1> {
         return result;
     }
 
+    Vector<T, size> scale() 
+    {
+        Vector<T, size> result;
+        auto ran = this->max();
     
+        for (int i = 0; i < size; i++)
+        {
+            result[i] = this->operator[](i) / ran;
+        }
+    
+     return result;
+    }
+
+
     /**
     * @brief Performs vector-matrix multiplication and returns the result as a new vector.
     *

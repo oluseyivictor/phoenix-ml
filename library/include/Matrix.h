@@ -8,7 +8,9 @@
 
 #include <iostream>
 #include <memory>
+#include <cstdlib>
 #include <initializer_list>
+#include <vector>
 
 
 namespace phoenix{
@@ -29,7 +31,7 @@ private:
     /**
      * @brief Unique pointer to the data stored in the matrix
      */
-    std::unique_ptr<T[]> data;
+    std::shared_ptr<T[]> data;
 
 public:
     /**
@@ -110,6 +112,28 @@ public:
      */
     int size() const {return rows*cols;}
 
+    T max(){
+        T val = data[0];
+
+        for (int i=1; i < size(); i++)
+        {
+            if(data[i] > val) val = data[i] ;
+        }
+        
+        return val;
+    }
+
+    void randfill(){
+        double d_rand;
+        srand(2);
+
+        for (int i=0; i < size(); i++){
+            d_rand = (rand() % 10);
+            d_rand /= 10;
+            data[i] = d_rand;
+        }
+    }
+
     /**
      * @brief Multiplies two matrices and returns the result.
      *
@@ -169,6 +193,38 @@ public:
 
     
 };
+
+
+template <typename T, int rows, int cols>
+class Tensor {
+public:
+  Tensor();
+
+  void addMatrix(const Matrix<T, rows, cols> &m);
+
+  void print() {std::cout<<matrices_[0]<<std::endl;}
+
+  Matrix<T, rows, cols> operator[](int r) {return matrices_.at(r);}
+
+  int size() {return matrices_.size();}
+
+private:
+  std::vector<Matrix<T, rows, cols>> matrices_;
+};
+
+
+
+template <typename T, int rows, int cols>
+Tensor<T, rows, cols>::Tensor() {}
+
+template <typename T, int rows, int cols>
+void Tensor<T, rows, cols>::addMatrix(const Matrix<T, rows, cols> &m) {
+  matrices_.push_back(m);
+
+}
+
+
+
 
 }
 
