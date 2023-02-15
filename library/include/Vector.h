@@ -18,17 +18,21 @@ namespace phoenix{
  *  @tparam T Type of elements stored in the vector
  *  @tparam size Number of element in the vector
  */
-template<typename T, int size>
-class Vector : public Matrix<T, size, 1> {
+template<typename T>
+class Vector : public Matrix<T> {
+    private:
+    int v_size;
  public:
         /**
      * @brief Constructs a vector object using matrix class constructor.
      *
      * @param list Initializer list for vector elements
      */
-    Vector(std::initializer_list<T> list = {}) 
-        : Matrix<T, size, 1>(list)
-    {}
+    Vector(int size) 
+        : Matrix<T>(size, 1)
+    {
+        v_size = size;
+    }
 
     /**
      * @brief Overloaded bracket operator to accesses vector element at index i.
@@ -37,7 +41,7 @@ class Vector : public Matrix<T, size, 1> {
      *
      * @return T& Reference to the element at the specified index.
      */
-    T& operator[] (int i)  {return Matrix<T, size, 1>::operator()(i, 0); }
+    T& operator[] (int i)  {return Matrix<T>::operator()(i, 0); }
 
     /**
      * @brief Overloaded bracket operator to accesses vector element at index i.
@@ -46,7 +50,7 @@ class Vector : public Matrix<T, size, 1> {
      *
      * @return const T& Reference to the element at the specified index.
      */
-    const T& operator[] (int i) const {return Matrix<T, size, 1>::operator()(i, 0); }
+    const T& operator[] (int i) const {return Matrix<T>::operator()(i, 0); }
 
     /**
      * @brief Multiplies the vector by a scalar value.
@@ -55,9 +59,9 @@ class Vector : public Matrix<T, size, 1> {
      *
      * @return A reference to the current Vector object.
      */
-    Vector<T, size> operator*(double scaler){
-        Vector<T, size> result;
-        for (int i = 0; i < size; i++){
+    Vector<T> operator*(double scaler){
+        Vector<T> result(v_size);
+        for (int i = 0; i < v_size; i++){
             result[i] = (*this)[i]*scaler;
         }
         return result;
@@ -70,26 +74,25 @@ class Vector : public Matrix<T, size, 1> {
      *
      * @return A reference to the current Vector object.
      */
-    friend Vector<T, size> operator*(double scaler, const Vector<T, size>& other ){
-        Vector<T, size> result;
-        for (int i = 0; i < size; i++){
+    friend Vector<T> operator*(double scaler, const Vector<T>& other ){
+        Vector<T> result(other.size());
+        for (int i = 0; i < other.size(); i++){
             result[i] = other[i]*scaler;
         }
         return result;
     }
 
-    Vector<T, size> scale() 
-    {
-        Vector<T, size> result;
-        auto ran = this->max();
-    
-        for (int i = 0; i < size; i++)
+
+        void operator= (const std::initializer_list<T> list ) {
+         int i = 0;
+         //std::cout<<list.size()<<std::endl;
+        for(const auto& value : list)
         {
-            result[i] = this->operator[](i) / ran;
+           this->operator[](i++) = value;
+            if (i== v_size) break;
         }
-    
-     return result;
     }
+
 
 
     /**

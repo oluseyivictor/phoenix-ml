@@ -31,8 +31,8 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest nlohmann_json)
 
-option(COMPLE_EXECUTABLE "option to compile the executable" OFF)
-option(ENABLE_TESTING "option to enable a unit testing build" OFF)
+option(COMPLE_EXECUTABLE "option to compile the executable" ON)
+option(ENABLE_TESTING "option to enable a unit testing build" ON)
 
 add_subdirectory(library)
 add_subdirectory(app)

@@ -24,14 +24,16 @@ namespace phoenix{
  *  @tparam cols Number of cols in the matrix
  */
 
-template<typename T, int rows, int cols>
+template<typename T>
 class Matrix {
 
-private:
+public:
     /**
      * @brief Unique pointer to the data stored in the matrix
      */
     std::shared_ptr<T[]> data;
+    int rows;
+    int cols;
 
 public:
     /**
@@ -39,16 +41,14 @@ public:
      *
      * @param list Initializer list for matrix elements
      */
-    Matrix(std::initializer_list<T> list = {})
-        : data(std::make_unique<T[]>(rows*cols))
-    {
-        int i = 0;
-        for(const auto& value : list)
+    Matrix(int r, int c = 1)
+        : rows(r), cols(c),  data(std::make_unique<T[]>(r*c))    //can i make T[] STD::vector
         {
-            data[i++] = value;
-            if (i== rows * cols) break;
+
         }
-    }
+
+    //virtual ~Matrix();
+
 
     /**
      * @brief Get the number of rows in the matrix
@@ -57,7 +57,31 @@ public:
      */
     int getRows() const {return rows;}
 
+    virtual void operator= (const std::vector<std::initializer_list<T>> list ) {
+         int i = 0;
+         //std::cout<<list.size()<<std::endl;
+         for(const auto& val : list)
+         {
+        for(const auto& value : val)
+        {
+            data[i++] = value;
+            if (i== rows * cols) break;
+        }
+         }
+    }
 
+
+    void insert(std::initializer_list<T> list ) {
+         int i = 0;
+         //std::cout<<list.size()<<std::endl;
+        for(const auto& value : list)
+        {
+            data[i++] = value;
+            if (i== rows * cols) break;
+        }
+        
+
+    }
     /**
      * @brief Get the number of cols in the matrix
      *
@@ -112,8 +136,8 @@ public:
      */
     int size() const {return rows*cols;}
 
-    T max(){
-        T val = data[0];
+    double max(){
+        double val = data[0];
 
         for (int i=1; i < size(); i++)
         {
@@ -122,6 +146,21 @@ public:
         
         return val;
     }
+
+    Matrix<T> scale() 
+    {
+        Matrix<T> result(rows, cols);
+        T ran = this->max();
+        //std::cout<<ran<<std::endl;
+    
+        for (int i = 0; i < this->size(); i++)
+        {
+            result.data[i] =  this->data[i]/ran;
+        }
+    
+     return result;
+    }
+
 
     void randfill(){
         double d_rand;
@@ -134,19 +173,28 @@ public:
         }
     }
 
+    void zerofill(){
+        double d_zero = 0;
+
+        for (int i=0; i < size(); i++){
+
+            data[i] = d_zero;
+        }
+    }    
+
     /**
      * @brief Multiplies two matrices and returns the result.
      *
      * @param other The matrix to multiply with.
      * @return The result of the matrix multiplication.
      */
-    template<int col2>
-    Matrix<T, rows, col2> operator*(const Matrix<T, cols, col2>& other) const{
-    Matrix<T, rows, col2> result;
-    for (int i = 0; i < rows; i++){
-        for (int j = 0; j< col2; j++){
+    
+    Matrix<T> operator*(const Matrix& other) const{
+    Matrix<T> result;
+    for (int i = 0; i < getRows(); i++){
+        for (int j = 0; j< other.getCols(); j++){
             result[i][j] = 0;
-            for (int k = 0; k < cols; k++) {
+            for (int k = 0; k < getCols(); k++) {
                 result[i][j] += (*this)[i][k] * other[k][j];
             }
         }
@@ -163,8 +211,8 @@ public:
      * @param other The matrix to multiply with.
      * @return The result of the matrix multiplication.
      */
-    Matrix<T, cols, rows> transpose() const{
-    Matrix<T, cols, rows> result;
+    Matrix<T> transpose() const{
+    Matrix<T> result;
     for (int i = 0; i< rows; i++){
         for (int j = 0; j < cols; j++){
             result[j][i] = operator()(i,j);
@@ -181,7 +229,7 @@ public:
      * @param mat Matrix to print
      * @return std::ostream& Output stream.
      */
-    friend std::ostream& operator<<(std::ostream& os, const Matrix<T, rows, cols>& mat){
+    friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat){
     for (int i = 0; i<mat.getRows(); i++){
     for (int j = 0; j < mat.getCols(); j++){
         os<<mat.data[i * mat.getCols() + j]<<" ";
@@ -195,30 +243,35 @@ public:
 };
 
 
-template <typename T, int rows, int cols>
+template <typename T>
 class Tensor {
 public:
   Tensor();
 
-  void addMatrix(const Matrix<T, rows, cols> &m);
+  void addMatrix(const Matrix<T> &m);
 
-  void print() {std::cout<<matrices_[0]<<std::endl;}
+  void print() {
+    for (int i = 0; i<this->size(); i++)
+    std::cout<<matrices_[i]<<std::endl;
+    }
 
-  Matrix<T, rows, cols> operator[](int r) {return matrices_.at(r);}
+  Matrix<T> operator[](int r) {return matrices_.at(r);}
 
   int size() {return matrices_.size();}
 
+
+
 private:
-  std::vector<Matrix<T, rows, cols>> matrices_;
+  std::vector<Matrix<T>> matrices_;
 };
 
 
 
-template <typename T, int rows, int cols>
-Tensor<T, rows, cols>::Tensor() {}
+template <typename T>
+Tensor<T>::Tensor() {}
 
-template <typename T, int rows, int cols>
-void Tensor<T, rows, cols>::addMatrix(const Matrix<T, rows, cols> &m) {
+template <typename T>
+void Tensor<T>::addMatrix(const Matrix<T> &m) {
   matrices_.push_back(m);
 
 }

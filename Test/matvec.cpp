@@ -7,8 +7,8 @@ using namespace phoenix;
 
 class MatrixTest : public ::testing::Test {
 protected:
-    Matrix<double, 2, 3>  m1;
-    Matrix<double, 3, 2>  m2;
+    Matrix<double>m1(2, 3);
+    Matrix<double>m2(3, 2);
 
     virtual void SetUp() {
         m1(0, 0) = 1;
@@ -18,12 +18,7 @@ protected:
         m1(1, 1) = 5;
         m1(1, 2) = 6;
 
-        m2(0, 0) = 7;
-        m2(0, 1) = 8;
-        m2(1, 0) = 9;
-        m2(1, 1) = 10;
-        m2(2, 0) = 11;
-        m2(2, 1) = 12;
+        m2 = {7,8,9,10,11,12};
     }
 };
 
@@ -40,7 +35,8 @@ TEST_F(MatrixTest, IndexOperator) {
 }
 
 TEST_F(MatrixTest, Multiply) {
-    Matrix<double, 2, 2> m3 = m1 * m2;
+    Matrix<double> m3; 
+    m3 = m1 * m2;
     EXPECT_EQ(m3.getRows(), 2);
     EXPECT_EQ(m3.getCols(), 2);
     EXPECT_EQ(m3(0, 0), 58);
@@ -50,7 +46,8 @@ TEST_F(MatrixTest, Multiply) {
 }
 
 TEST_F(MatrixTest, Transpose) {
-    auto  m3 = m1.transpose();
+     Matrix<double> m3;
+    m3 = m1.transpose();
     EXPECT_EQ(m3.getRows(), 3);
     EXPECT_EQ(m3.getCols(), 2);
     EXPECT_EQ(m3(0, 0), 1);
@@ -63,8 +60,8 @@ TEST_F(MatrixTest, Transpose) {
 
 class VectorTest : public ::testing::Test {
 protected:
-    Vector<double, 6>  T1;
-    Vector<double, 6>  T2;
+    Vector<double>  T1;
+    Vector<double>  T2;
 
     virtual void SetUp() {
         T1[0] = 1;
@@ -74,12 +71,8 @@ protected:
         T1[4] = 5;
         T1[5] = 6;
 
-        T2[0] = 7;
-        T2[1] = 8;
-        T2[2] = 9;
-        T2[3] = 10;
-        T2[4] = 11;
-        T2[5] = 12;
+
+        T2 = {7,8,9,10,11,12};
     }
 };
 
@@ -91,7 +84,7 @@ TEST_F(VectorTest, Constructor) {
 TEST_F(VectorTest, IndexOperator) {
     T1[0] = 1.0;
     T2[2] = 2.5;
-    EXPECT_EQ(T1[0], 1.0);
+    EXPECT_EQ(T1[0], 2.0);
     EXPECT_EQ(T2[2], 2.5);
 }
 
