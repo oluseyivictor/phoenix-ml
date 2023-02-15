@@ -11,6 +11,7 @@
 #include <memory>
 #include <random>
 #include <cmath>
+#include <initializer_list>
 
 using namespace phoenix;
 
@@ -128,6 +129,84 @@ void ShuffleMatrixRows(Matrix<T>& matrix, double randomness = 1.0) {
                        matrix.data.get() + j * matrix.getCols() );
     }
   }
+}
+
+template<typename T>
+Matrix<T> SetMatrix(Matrix<T>& matrix, std::initializer_list<std::string> labels)
+{
+    int rows = matrix.getRows();
+    int cols = labels.size();
+
+    Matrix<T> result(rows, cols);
+    
+    int j = 0;
+    for (std::string n : labels)
+    {
+        auto recept = convert_col(matrix, stoi(n));
+
+        for (int i = 0; i < rows; i++)
+        {
+            result(i, j)= recept[i];
+        }
+    ++j;
+    }
+    
+    return result;
+}
+
+
+template<typename T>
+Matrix<T> RowMatrix(Matrix<T>& matrix, int nrows)
+{
+    int start = nrows > 0 ? 0 : abs(nrows) ;   // 0 (start) or 75(start) 
+    int end  = nrows > 0 ? nrows : matrix.getRows() ; //35(end) or rows(end)
+
+
+    std::cout<<start<<"    "<<end<<std::endl;
+
+    int rows = end - start;
+    int cols = matrix.getCols();
+
+    Matrix<T> result(rows, cols);
+    
+    int j = 0; 
+    for (int il = start; il < end; il++)
+    {
+        auto recept = convert_row(matrix, il);
+
+        for (int i = 0; i < cols; i++)
+        {
+            result(j, i)= recept[i];
+        }
+    ++j;
+    }
+    
+    return result;
+}
+template<typename T>
+auto train_test_split(Matrix<T>& X, Matrix<T>& Y,float test_size =1 .0)
+{
+
+    double train_no  = test_size;
+    double test_no = (0 - test_size) ;
+
+    test_no *= X.getRows() ;
+    train_no *= Y.getRows();
+
+    std::cout<<test_no<<"------"<<train_no<<std::endl;
+
+    struct results {
+        Matrix<T> X_train;
+        Matrix<T> X_test;
+        Matrix<T> Y_train;
+        Matrix<T> Y_test;
+    };
+
+    return results{RowMatrix(X, train_no),
+                   RowMatrix(X, test_no),
+                   RowMatrix(Y, train_no),
+                   RowMatrix(Y, test_no) };
+    
 }
 
 
