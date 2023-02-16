@@ -255,13 +255,13 @@ public:
     std::cout<<matrices_[i]<<std::endl;
     }
 
-  Matrix<T> operator[](int r) {return matrices_.at(r);}
+  Matrix<T>& operator[](int r) {return matrices_.at(r);}
 
   int size() {return matrices_.size();}
 
 
 
-private:
+public:
   std::vector<Matrix<T>> matrices_;
 };
 

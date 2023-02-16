@@ -72,6 +72,8 @@ using namespace phoenix;
         Vector<double>result(m2.getRows()); 
 
         for (int k = 0; k < m2.getRows(); k++){
+            
+            result[k] = 0;
 
             for (int i = 0; i < v1.getRows(); i++){
 
@@ -184,7 +186,7 @@ Matrix<T> RowMatrix(Matrix<T>& matrix, int nrows)
     return result;
 }
 template<typename T>
-auto train_test_split(Matrix<T>& X, Matrix<T>& Y,float test_size =1 .0)
+auto train_test_split(Matrix<T>& X, Matrix<T>& Y,float test_size =1.0)
 {
 
     double train_no  = test_size;
