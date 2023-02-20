@@ -6,11 +6,10 @@
 #ifndef UTILX_H
 #define UTILX_H
 
-#include "Vector.h"
+#include "Matrix.h"
 #include <algorithm>
 #include <memory>
 #include <random>
-#include <cmath>
 #include <initializer_list>
 
 using namespace phoenix;
@@ -24,8 +23,6 @@ using namespace phoenix;
      * @return A predicted value which is input multiplied by weight.
      */
     double scalar_multiply(double input, double weight) { return(input*weight); }
-
-    double square_error(double y_pred, double y_true) {return pow((y_pred - y_true), 2);}
 
     template<typename T>
      Vector<T> convert_row(Matrix<T>& other, int i)
@@ -69,6 +66,10 @@ using namespace phoenix;
 
     template<typename T>
     Vector<T> vecTomat_multiply(Vector<T>& v1, Matrix<T>& m2){          //vector to matrixmultiply
+        if (v1.getRows() != m2.getCols()) {
+            throw std::invalid_argument("The number of vector rows must be equal to Matrix column. ");
+        }
+        
         Vector<double>result(m2.getRows()); 
 
         for (int k = 0; k < m2.getRows(); k++){
@@ -98,13 +99,7 @@ using namespace phoenix;
         return result;
     }
 
-    double sigmoid(double x){
-        double result;
-        result = 1/(1 + exp(-x));
 
-        return result;
-    }
-    
     template<typename T>
     Vector<T> vector_sigmoid(Vector<T>& v) 
     {
@@ -113,6 +108,19 @@ using namespace phoenix;
         for (int i = 0; i < v.size(); i++)
         {
             result[i] =  sigmoid(v[i]);
+        }
+    
+     return result;
+    }
+
+    template<typename T>
+    Vector<T> v_sigmoid_derivative(Vector<T>& v) 
+    {
+        Vector<T>result(v.size());
+    
+        for (int i = 0; i < v.size(); i++)
+        {
+            result[i] =  sigmoid_derivative(v[i]);
         }
     
      return result;

@@ -13,6 +13,7 @@
 #include <vector>
 
 
+
 namespace phoenix{
 
 
@@ -161,7 +162,6 @@ public:
      return result;
     }
 
-
     void randfill(){
         double d_rand;
         srand(2);
@@ -212,7 +212,7 @@ public:
      * @return The result of the matrix multiplication.
      */
     Matrix<T> transpose() const{
-    Matrix<T> result;
+    Matrix<T> result(cols, rows);
     for (int i = 0; i< rows; i++){
         for (int j = 0; j < cols; j++){
             result[j][i] = operator()(i,j);

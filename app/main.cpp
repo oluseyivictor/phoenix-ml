@@ -21,9 +21,9 @@ Matrix<double>raw_L(3,2);
 raw_X = {{2, 8, 5, 5, 1, 8}};                                                 
 
 Vector<double> raw_Y(3);    //Matrix<double> raw_Y(3);  raw_Y = {200, 90, 100};
-Vector<double> raw_Z(3); 
-raw_Z = {200, 90, 100};
-raw_Y = {0.12, 0.90, 0.545};
+Vector<double> raw_Z(4); 
+raw_Z = {201, 90, 100, 74};
+raw_Y = {0.12, 0.90, 0.545, 0.8};
 //auto raw_P = convert_col(raw_X, 0);
 //auto train_X = raw_X.scale();
 //auto train_Y = raw_Y.scale();
@@ -45,11 +45,24 @@ raw_Y = {0.12, 0.90, 0.545};
 // auto [X_train, X_test, Y_train, Y_test] = train_test_split(raw_Y,raw_Z, 1);
 // std::cout<< Y_test <<std::endl;
 
-NeuralModel<double> nn(raw_L, raw_X, {3, 3, 3});
+ NeuralModel<double> nn(raw_L, raw_X, {2, 3, 5}, 0.01);
 
-nn.construct_network(raw_Y, raw_Z);
+ nn.construct_network(raw_Y, raw_Z);
 
-nn.forward_propagation();
+ nn.forward_propagation();
+ for (Vector<double> i : nn.B) std::cout<<i<<std::endl;
+
+ nn.back_propagation(); 
+
+  nn.forward_propagation();
+   for (Vector<double> i : nn.B) std::cout<<i<<std::endl;
+
+
+
+
+
+
+
 
 
 return 1;
