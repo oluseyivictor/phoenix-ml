@@ -12,29 +12,32 @@ using namespace phoenix;
 int main() {
 
 
-Matrix<double>raw_X(6,1);
-Matrix<double>raw_L(3,2);
+Matrix<double>raw_X(4,3);
+Matrix<double>raw_Y(4,2);
 
  //ReadFileToMatrix("../../app/data.txt", raw_X);
 // raw_X =Matrix<double>(3,34);
 
-raw_X = {{2, 8, 5, 5, 1, 8}};                                                 
+raw_X = {{2, 8, 5}, {2, 8, 5}, {2, 8, 5}, {2, 8, 5}};
+raw_Y = {{1,4}, {1,4},{1,4},{1,4}};                                                 
 
-Vector<double> raw_Y(3);    //Matrix<double> raw_Y(3);  raw_Y = {200, 90, 100};
-Vector<double> raw_Z(4); 
-raw_Z = {201, 90, 100, 74};
-raw_Y = {0.12, 0.90, 0.545, 0.8};
-//auto raw_P = convert_col(raw_X, 0);
-//auto train_X = raw_X.scale();
-//auto train_Y = raw_Y.scale();
+// Vector<double> raw_Y(256);    //Matrix<double> raw_Y(3);  raw_Y = {200, 90, 100};
+// Vector<double> raw_Z(10); 
+// raw_Z = {201, 90, 100, 74};
+// raw_Y = {0.12, 0.90, 0.545, 0.8};
+// //auto raw_P = convert_col(raw_X, 0);
+// auto train_X = raw_X.scale();
+// auto train_Y = raw_Y.scale();
 
-//std::cout<< raw_P  <<std::endl;
+// std::cout<< raw_X  <<std::endl;
+// std::cout<< raw_X.getCols()  <<std::endl;
+
+// std::cout<< raw_L  <<std::endl;
+// std::cout<< raw_L.getCols()  <<std::endl;
 
 //ShuffleMatrixRows(raw_X);
 
 //auto Tr = convert_col(raw_X, 7);
-
-//std::cout<< Tr <<std::endl;
 
 
 // raw_Y = SetMatrix(raw_X, {"0","1","2","3","4"});
@@ -45,17 +48,24 @@ raw_Y = {0.12, 0.90, 0.545, 0.8};
 // auto [X_train, X_test, Y_train, Y_test] = train_test_split(raw_Y,raw_Z, 1);
 // std::cout<< Y_test <<std::endl;
 
- NeuralModel<double> nn(raw_L, raw_X, {2, 3, 5}, 0.01);
+ NeuralModel<double> nn(raw_X, raw_Y, {10}, 0.001);
 
- nn.construct_network(raw_Y, raw_Z);
 
- nn.forward_propagation();
- for (Vector<double> i : nn.B) std::cout<<i<<std::endl;
+//nn.NNConnfigure({"linear","linear"});
 
- nn.back_propagation(); 
 
-  nn.forward_propagation();
-   for (Vector<double> i : nn.B) std::cout<<i<<std::endl;
+nn.NNTrain(5);
+
+auto input = convert_row(raw_X, 1);
+
+std::cout<< nn.NNpredict(input) <<std::endl;
+
+
+
+
+
+//  nn.forward_propagation();
+
 
 
 
