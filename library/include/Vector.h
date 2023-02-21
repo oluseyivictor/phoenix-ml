@@ -7,27 +7,7 @@
 #define VECTOR_H
 
 #include "Matrix.h"
-#include <cmath>
 
-
-double rms_error(double y_pred, double y_true) {return 0.5 * pow((y_pred - y_true), 2);}
-double pd_error(const double a, const double b) { return a - b; }
-
-    double sigmoid(double x){
-        double result;
-        result = 1/(1 + std::exp(-x));
-
-        return result;
-    }
-
- 
-double sigmoid_derivative(double a){
-        double result;
-        result = sigmoid(a) * (1.0 - sigmoid(a));
-
-        return result;
-    }   
-    
 namespace phoenix{
 
 /**
@@ -94,21 +74,7 @@ class Vector : public Matrix<T> {
         return result;
     }
 
-    friend Vector<T> operator-(const Vector& target, const Vector& out) 
-    {
-        if (out.getRows() != target.getRows()) {
-            throw std::invalid_argument("The number of vector rows must be equal in vector error. ");
-        }
 
-        Vector<T> result(out.size());
-
-        double sum = 0;
-        for (int i=0; i < out.size(); i++){
-            result[i] = (target[i] - out[i]) * sigmoid_derivative(out[i]);
-        }
-
-        return result;
-    }
 
 
     friend Vector<T> operator+(const Vector& v, const Vector& other) 

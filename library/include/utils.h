@@ -11,8 +11,17 @@
 #include <memory>
 #include <random>
 #include <initializer_list>
+#include "activations.h"
+
 
 using namespace phoenix;
+
+
+
+
+
+double rms_error(double y_pred, double y_true) {return 0.5 * std::pow((y_pred - y_true), 2);}
+double pd_error(const double a, const double b) { return a - b; }
 
     /**
      * @brief Single input single output neural network.
@@ -23,6 +32,23 @@ using namespace phoenix;
      * @return A predicted value which is input multiplied by weight.
      */
     double scalar_multiply(double input, double weight) { return(input*weight); }
+    
+    template<typename T>
+    T total_error(const Vector<T> target, const Vector<T> output)
+    {
+        if (output.getRows() != target.getRows()) {
+            throw std::invalid_argument("The number of vector rows must be equal in vector total error compute. ");
+        }
+
+        T sum = 0.0;
+
+        for (int i=0; i < target.getRows(); i++)
+        {
+            sum += rms_error(target[i], output[i]);
+        }
+        return sum;
+
+    }
 
     template<typename T>
      Vector<T> convert_row(Matrix<T>& other, int i)
@@ -108,6 +134,19 @@ using namespace phoenix;
         for (int i = 0; i < v.size(); i++)
         {
             result[i] =  sigmoid(v[i]);
+        }
+    
+     return result;
+    }
+
+        template<typename T>
+    Vector<T> vector_act(Vector<T>& v, std::function<double(double)> &act) 
+    {
+        Vector<T>result(v.size());
+    
+        for (int i = 0; i < v.size(); i++)
+        {
+            result[i] =  act(v[i]);
         }
     
      return result;
