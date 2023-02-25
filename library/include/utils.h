@@ -114,16 +114,16 @@ double pd_error(const double a, const double b) { return a - b; }
         return result;
     }
 
-    template<typename T>
-    Vector<T> mlayer_multiply(Vector<T>& input, Tensor<T>& weights){
-        Vector<double>result(input.size());
-        Matrix<T> fat = weights[0];
-        result = vecTomat_multiply(input, fat);
-        fat = weights[1];
-        result = vecTomat_multiply(result, fat);
+    // template<typename T>
+    // Vector<T> mlayer_multiply(Vector<T>& input, Tensor<T>& weights){
+    //     Vector<double>result(input.size());
+    //     Matrix<T> fat = weights[0];
+    //     result = vecTomat_multiply(input, fat);
+    //     fat = weights[1];
+    //     result = vecTomat_multiply(result, fat);
 
-        return result;
-    }
+    //     return result;
+    // }
 
 
     template<typename T>
