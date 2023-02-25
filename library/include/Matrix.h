@@ -14,13 +14,14 @@
 #include <cmath>
 
 
-   
+
     
 
 
 namespace phoenix{
 
-
+template<typename T>
+class Vector;
 /**
  *  @brief The Matrix class represents a matrix of values with generic programming.
  * 
@@ -32,7 +33,7 @@ namespace phoenix{
 template<typename T>
 class Matrix {
 
-public:
+private:
     /**
      * @brief Unique pointer to the data stored in the matrix
      */
@@ -132,6 +133,8 @@ public:
      * @return A pointer to the first element in the row.
      */
     const T* operator[](size_t row) const {return data.get() + row * cols;}
+
+    T* getdata() {return  data.get();}
 
 
     /**
@@ -245,42 +248,6 @@ public:
 
     
 };
-
-
-template <typename T>
-class Tensor {
-public:
-  Tensor();
-
-  void addMatrix(const Matrix<T> &m);
-
-  void print() {
-    for (int i = 0; i<this->size(); i++)
-    std::cout<<matrices_[i]<<std::endl;
-    }
-
-  Matrix<T>& operator[](int r) {return matrices_.at(r);}
-
-  int size() {return matrices_.size();}
-
-
-
-public:
-  std::vector<Matrix<T>> matrices_;
-};
-
-
-
-template <typename T>
-Tensor<T>::Tensor() {}
-
-template <typename T>
-void Tensor<T>::addMatrix(const Matrix<T> &m) {
-  matrices_.push_back(m);
-
-}
-
-
 
 
 }
