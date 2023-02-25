@@ -6,7 +6,7 @@
 #ifndef NN_H
 #define NN_H
 
-#include "Matrix.h"
+#include "tensor.h"
 #include "Vector.h"
 #include "utils.h"
 #include <functional>
@@ -16,16 +16,13 @@ using namespace phoenix;
 
 
 
-  template <typename T>
 class NeuralModel {
 
 private:
     Matrix<double> feature;
-    Matrix<double> label;
-    Tensor<T> network;
+    Matrix<double> label; 
     std::initializer_list<int> hids;    //number of hidden neuron in each layer
-    std::vector<Vector<T>> B;           //Biases
-    std::vector<Vector<T>> target;
+    std::vector<Vector<double>> target;
     int no_hid = 0;
     double learning_rate = 0.01;
     
@@ -35,6 +32,10 @@ private:
    }; 
 
    std::vector<act> A;    //activation_functions;
+
+  protected:
+  Tensor<double> network;
+  std::vector<Vector<double>> B;           //Biases
 
 public:
     /**
@@ -54,6 +55,7 @@ public:
      */
     ~NeuralModel()  {};
 
+  protected:
     void NNConnfigure(std::initializer_list<std::string> act_function)
     {
       //Empty all elements of activation initializer
@@ -90,24 +92,24 @@ public:
       }
     }
 
-private:
+
 
     //Build NN network with input -- hidden layers and  -- output
     void NNBuild()
     {
 
         int bk_n = feature.getCols();
-        Vector<T> input(bk_n);
+        Vector<double> input(bk_n);
         
         network.addMatrix(input);
         
 
         for (auto n: hids)   //Add hidden layer neurons to network    
         {
-            Vector<T> neurons(n);
-            Vector<T> hidden_bias(n);
+            Vector<double> neurons(n);
+            Vector<double> hidden_bias(n);
 
-            Matrix<T> weight(n,bk_n);   //construct weight matrices
+            Matrix<double> weight(n,bk_n);   //construct weight matrices
 
             weight.randfill();
             hidden_bias.zerofill();
@@ -121,13 +123,13 @@ private:
 
         int last_n = label.getCols();
 
-        Vector<T> output(last_n); 
-        Vector<T> output_bias(last_n);   //this is made redundant since bias is not added to output
+        Vector<double> output(last_n); 
+        Vector<double> output_bias(last_n);   //this is made redundant since bias is not added to output
         output_bias.zerofill();
         B.push_back(output_bias);
         
 
-        Matrix<T> weight(last_n, bk_n);
+        Matrix<double> weight(last_n, bk_n);
         weight.randfill();
         network.addMatrix(weight);
         network.addMatrix(output);
@@ -144,7 +146,7 @@ private:
 
     }
 
-    void forward_propagation(const Vector<T> &input){
+    void forward_propagation(const Vector<double> &input){
 
         int layer= 0;
         int i = 0;
@@ -173,7 +175,7 @@ private:
 
     }
 
-    void back_propagation(const Vector<T> &expected_output){
+    void back_propagation(const Vector<double> &expected_output){
 
     std::vector<Vector<double>> error;
     int count = network.size() - 1;
@@ -221,9 +223,9 @@ private:
       Matrix<double>& h_weight = network[--count];
       Vector<double> hidden_n =  convert_col(network[--count], 0);
 
-      for (int i = 0; i < h_weight.rows; i++)
+      for (int i = 0; i < h_weight.getRows(); i++)
       {
-        for (int j = 0; j < h_weight.cols; j++){
+        for (int j = 0; j < h_weight.getCols(); j++){
             double delta_weight = learning_rate * error[layer][i] * hidden_n[j];
             h_weight[i][j] += delta_weight;
         }
@@ -237,57 +239,19 @@ private:
      //network.print();
 
     }   
+
+    Vector<double> NNPredicted()
+  {
+    int count = network.size() - 1;
+
+    Vector<double> output =  convert_col(network[count], 0);
+
+    return (output);
+  } 
+
   
-  public:
 
-  Vector<T> NNpredict(const Vector<T> &predict)
-  {
-    int count = network.size() - 1;
-
-    forward_propagation(predict);
-
-    Vector<double> output =  convert_col(network[count], 0);
-
-    return (output);
-
-  }
-
-  Vector<T> NNPredicted()
-  {
-    int count = network.size() - 1;
-
-    Vector<double> output =  convert_col(network[count], 0);
-
-    return (output);
-  }
-
-void NNTrain(int epochs = 100)
-{
-  double error;
-
-  for (int count = 0; count < epochs; count++)
-  {
-    error = 0;
-    for(int i = 0; i < feature.rows; i++)
-    {
-      auto input = convert_row(feature, i);
-      auto target = convert_row(label, i);
-
-      forward_propagation(input);
-      back_propagation(target);
-
-      error += total_error(target,  NNPredicted());
-    }
-
-    std::cout<<"Epoch----- "<< count << " Error: "<<error/feature.rows<<std::endl;
-  }
-
-}
-    
 
 };
-
-
-
 
 #endif
