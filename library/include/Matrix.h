@@ -53,6 +53,10 @@ public:
 
         }
 
+    Matrix(): rows(1), cols(1),  data(std::make_unique<T[]>(1)) 
+    {
+
+    }
     //virtual ~Matrix();
 
 
@@ -65,7 +69,6 @@ public:
 
     virtual void operator= (const std::vector<std::initializer_list<T>> list ) {
          int i = 0;
-         //std::cout<<list.size()<<std::endl;
          for(const auto& val : list)
          {
         for(const auto& value : val)
@@ -76,18 +79,6 @@ public:
          }
     }
 
-
-    void insert(std::initializer_list<T> list ) {
-         int i = 0;
-         //std::cout<<list.size()<<std::endl;
-        for(const auto& value : list)
-        {
-            data[i++] = value;
-            if (i== rows * cols) break;
-        }
-        
-
-    }
     /**
      * @brief Get the number of cols in the matrix
      *
