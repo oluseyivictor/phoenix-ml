@@ -21,7 +21,9 @@ class NeuralModel {
 private:
     Matrix<double> feature;
     Matrix<double> label; 
-    std::initializer_list<int> hids;    //number of hidden neuron in each layer
+    std::initializer_list<int> hid_list; 
+    std::vector<int> hiddn;
+       //number of hidden neuron in each layer
     std::vector<Vector<double>> target;
     int no_hid = 0;
     double learning_rate = 0.01;
@@ -36,19 +38,24 @@ private:
   protected:
   Tensor<double> network;
   std::vector<Vector<double>> B;           //Biases
+ 
 
 public:
     /**
      * @brief Constructs a neural network model object.
      */
+    NeuralModel();
+
     NeuralModel (Matrix<double> &in,
                  Matrix<double> &out,
                  std::initializer_list<int> hidden_neurons,
-                 double rate) : feature(in), label(out), hids(hidden_neurons), learning_rate(rate) 
+                 double rate) : feature(in), label(out), hid_list(hidden_neurons), learning_rate(rate) 
                  {
-                    no_hid = hidden_neurons.size();
-                    NNBuild();
+                    for (int n : hid_list) hiddn.push_back(n);
+                    NNBuild(feature.getCols(), label.getCols(), hiddn);
                  };
+
+    
 
     /**
      * @brief Destructs a neural network model.
@@ -95,10 +102,11 @@ public:
 
 
     //Build NN network with input -- hidden layers and  -- output
-    void NNBuild()
+    void NNBuild(int input_size, int output_size, std::vector<int> &hids)
     {
 
-        int bk_n = feature.getCols();
+        int bk_n = input_size;            //feature.getCols();
+        no_hid = hids.size();
         Vector<double> input(bk_n);
         
         network.addMatrix(input);
@@ -121,7 +129,7 @@ public:
             bk_n = neurons.size();
         }
 
-        int last_n = label.getCols();
+        int last_n = output_size;          //label.getCols();
 
         Vector<double> output(last_n); 
         Vector<double> output_bias(last_n);   //this is made redundant since bias is not added to output
@@ -134,11 +142,11 @@ public:
         network.addMatrix(weight);
         network.addMatrix(output);
 
-       // network.print();
+        //network.print();
        act default_fn = {sigmoid, sigmoid_derivative};
        act output_fn = {linear, linear_derivative};
 
-       for (int i = 0; i < no_hid; i++)
+       for (int i = 0; i < hids.size(); i++)
        {
         A.push_back(default_fn);
        }
@@ -253,5 +261,10 @@ public:
 
 
 };
+
+NeuralModel::NeuralModel()
+{
+
+}
 
 #endif
